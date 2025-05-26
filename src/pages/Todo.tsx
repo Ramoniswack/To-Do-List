@@ -1,0 +1,195 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+
+// Types
+type TodoItem = {
+  text: string;
+  done: boolean;
+};
+
+const Todo = () => {
+  const navigate = useNavigate();
+  const loggedUser = JSON.parse(Cookies.get("loggedInUser") || "{}");
+  const userKey = `todos_${loggedUser.email}`;
+
+  const [todos, setTodos] = useState<TodoItem[]>([]);
+  const [newTodo, setNewTodo] = useState("");
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editedText, setEditedText] = useState("");
+
+  useEffect(() => {
+    const storedTodos = localStorage.getItem(userKey);
+    if (storedTodos) {
+      setTodos(JSON.parse(storedTodos));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    Cookies.remove("loggedInUser");
+    navigate("/");
+  };
+
+  const handleAddTodo = () => {
+    if (!newTodo.trim()) return;
+    const updatedTodos = [...todos, { text: newTodo, done: false }];
+    setTodos(updatedTodos);
+    localStorage.setItem(userKey, JSON.stringify(updatedTodos));
+    setNewTodo("");
+  };
+
+  const toggleTodoDone = (index: number) => {
+    const updatedTodos = [...todos];
+    updatedTodos[index].done = !updatedTodos[index].done;
+    setTodos(updatedTodos);
+    localStorage.setItem(userKey, JSON.stringify(updatedTodos));
+  };
+
+  const handleDeleteTodo = (index: number) => {
+    const updatedTodos = todos.filter((_, i) => i !== index);
+    setTodos(updatedTodos);
+    localStorage.setItem(userKey, JSON.stringify(updatedTodos));
+  };
+
+  const handleClearAll = () => {
+    if (window.confirm("Are you sure you want to clear all tasks?")) {
+      setTodos([]);
+      localStorage.removeItem(userKey);
+    }
+  };
+
+  const startEditTodo = (index: number) => {
+    setEditingIndex(index);
+    setEditedText(todos[index].text);
+  };
+
+  const handleSaveEdit = (index: number) => {
+    const updatedTodos = [...todos];
+    updatedTodos[index].text = editedText;
+    setTodos(updatedTodos);
+    localStorage.setItem(userKey, JSON.stringify(updatedTodos));
+    setEditingIndex(null);
+    setEditedText("");
+  };
+
+  const pending = todos.filter((t) => !t.done).length;
+  const completed = todos.filter((t) => t.done).length;
+
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
+      <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md">
+        <h1 className="text-3xl font-bold text-center text-indigo-600 mb-4">Your Tasks</h1>
+
+        {/* Input Form */}
+        <div className="flex mb-4">
+          <input
+            type="text"
+            placeholder="Add a task"
+            value={newTodo}
+            onChange={(e) => setNewTodo(e.target.value)}
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <button
+            onClick={handleAddTodo}
+            className="bg-indigo-600 text-white px-4 rounded-r-lg hover:bg-indigo-700 transition cursor-pointer"
+          >
+            Add
+          </button>
+        </div>
+
+        {/* Task List */}
+        <ul className="space-y-3 mb-6">
+          {todos.map((todo, index) => (
+            <li
+              key={index}
+              className="flex justify-between items-center bg-gray-50 px-4 py-3 border rounded-lg shadow"
+            >
+              {editingIndex === index ? (
+                <form
+  onSubmit={(e) => {
+    e.preventDefault();
+    handleSaveEdit(index);
+  }}
+  className="flex w-full gap-2"
+>
+  <input
+    value={editedText}
+    onChange={(e) => setEditedText(e.target.value)}
+    className="flex-grow border px-2 py-1 rounded"
+    autoFocus
+  />
+  <button
+    type="submit"
+    className="bg-indigo-500 text-white px-3 py-1 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+    disabled={!editedText.trim()}
+  >
+    Save
+  </button>
+  <button
+    type="button"
+    onClick={() => setEditingIndex(null)}
+    className="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400"
+  >
+    Cancel
+  </button>
+</form>
+
+              ) : (
+                <>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={todo.done}
+                      onChange={() => toggleTodoDone(index)}
+                      className="form-checkbox h-5 w-5 text-indigo-600"
+                    />
+                    <span className={`text-sm ${todo.done ? "line-through text-gray-400" : "text-gray-800"}`}>{todo.text}</span>
+                  </div>
+                  <div className="flex gap-2 text-sm">
+                    <button onClick={() => startEditTodo(index)} className="text-indigo-600 hover:underline">Edit</button>
+                    <button onClick={() => handleDeleteTodo(index)} className="text-red-500 hover:underline">Delete</button>
+                  </div>
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-3 text-center mb-4">
+          <div>
+            <div className="text-xl font-bold text-yellow-600">{pending}</div>
+            <div className="text-sm text-gray-600">Pending</div>
+          </div>
+          <div>
+            <div className="text-xl font-bold text-green-600">{completed}</div>
+            <div className="text-sm text-gray-600">Completed</div>
+          </div>
+          <div>
+            <div className="text-xl font-bold text-indigo-600">{todos.length}</div>
+            <div className="text-sm text-gray-600">Total</div>
+          </div>
+        </div>
+
+        {/* Clear All */}
+        {todos.length > 0 && (
+          <button
+            onClick={handleClearAll}
+            className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition cursor-pointer"
+          >
+            Clear All
+          </button>
+        )}
+
+        <button
+          onClick={handleLogout}
+          className="mt-4 w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition cursor-pointer"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Todo;
