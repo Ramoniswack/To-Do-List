@@ -1,7 +1,8 @@
 import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import type { ReactNode } from "react";
 
-const PublicRoute = ({ children }: { children: JSX.Element }) => {
+const PublicRoute = ({ children }: { children: ReactNode }) => {
   const loggedInUser = Cookies.get("loggedInUser");
 
   if (loggedInUser) {
