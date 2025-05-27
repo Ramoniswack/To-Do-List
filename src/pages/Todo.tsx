@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import type { TodoItem } from "../types/types";
+import { FiSearch } from "react-icons/fi";
 
 const Todo = () => {
   const navigate = useNavigate();
@@ -87,7 +88,11 @@ const Todo = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
       <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center text-indigo-600 mb-4">Your Tasks</h1>
+        <div className="flex items-center justify-center gap-2 mb-4">
+  <h1 className="text-3xl font-bold text-indigo-600">Your Tasks</h1>
+  <FiSearch className="text-2xl text-indigo-600 hover:scale-110 transition-transform cursor-pointer" />
+</div>
+
 
         {/* Input Form */}
         {/* <div className="flex mb-4">
