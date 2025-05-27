@@ -37,8 +37,8 @@ const Todo = () => {
      const trimmedText = newTodo.trim();
   if (!trimmedText) return;
 
-  if (trimmedText.length > 30) {
-    alert("Todo should not exceed 30 characters.");
+  if (trimmedText.length > 100) {
+    alert("Todo should not exceed 50 characters.");
     return;
   }
     const updatedTodos = [...todos, { text: newTodo, done: false }];
@@ -90,7 +90,7 @@ const Todo = () => {
         <h1 className="text-3xl font-bold text-center text-indigo-600 mb-4">Your Tasks</h1>
 
         {/* Input Form */}
-        <div className="flex mb-4">
+        {/* <div className="flex mb-4">
           <input
             type="text"
             placeholder="Add a task"
@@ -104,7 +104,30 @@ const Todo = () => {
           >
             Add
           </button>
-        </div>
+        </div>  */}
+          <form
+  onSubmit={(e) => {
+    e.preventDefault();
+    handleAddTodo();
+  }}
+  className="flex mb-4"
+>
+  <input
+    type="text"
+    placeholder="Add a task"
+    value={newTodo}
+    onChange={(e) => setNewTodo(e.target.value)}
+    maxLength={50}
+    className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+  />
+  <button
+    type="submit"
+    className="bg-indigo-600 text-white px-4 rounded-r-lg hover:bg-indigo-700 transition cursor-pointer"
+  >
+    Add
+  </button>
+</form>
+
 
         {/* Task List */}
         <ul className="space-y-3 mb-6">
@@ -152,11 +175,12 @@ const Todo = () => {
                       onChange={() => toggleTodoDone(index)}
                       className="form-checkbox h-5 w-5 text-indigo-600"
                     />
-                  <span
-  className={`text-sm break-words max-w-[180px] overflow-hidden ${todo.done ? "line-through text-gray-400" : "text-gray-800"}`}
+<span
+  className={`text-sm break-words w-full ${todo.done ? "line-through text-gray-400" : "text-gray-800"}`}
 >
   {todo.text}
 </span>
+
                   </div>
                   <div className="flex gap-2 text-sm">
                     <button onClick={() => startEditTodo(index)} className="text-indigo-600 hover:underline">Edit</button>
