@@ -85,7 +85,7 @@ localStorage.setItem("users", JSON.stringify(users));
 
         <div className="relative">
           <input
-  type={showPassword ? "text" : "password"}
+      type={showPassword ? "text" : "password"}
             {...register("password")}
             placeholder="Password"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
