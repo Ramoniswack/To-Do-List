@@ -183,6 +183,8 @@ const Todo = () => {
   {todo.text}
 </span>
 
+
+
                   </div>
                   <div className="flex gap-2 text-sm">
                     <button onClick={() => startEditTodo(index)} className="text-indigo-600 hover:underline">Edit</button>
