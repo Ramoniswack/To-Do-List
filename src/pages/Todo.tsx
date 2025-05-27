@@ -32,6 +32,15 @@ const Todo = () => {
 
   const handleAddTodo = () => {
     if (!newTodo.trim()) return;
+
+
+     const trimmedText = newTodo.trim();
+  if (!trimmedText) return;
+
+  if (trimmedText.length > 30) {
+    alert("Todo should not exceed 30 characters.");
+    return;
+  }
     const updatedTodos = [...todos, { text: newTodo, done: false }];
     setTodos(updatedTodos);
     localStorage.setItem(userKey, JSON.stringify(updatedTodos));
@@ -143,7 +152,11 @@ const Todo = () => {
                       onChange={() => toggleTodoDone(index)}
                       className="form-checkbox h-5 w-5 text-indigo-600"
                     />
-                    <span className={`text-sm ${todo.done ? "line-through text-gray-400" : "text-gray-800"}`}>{todo.text}</span>
+                  <span
+  className={`text-sm break-words max-w-[180px] overflow-hidden ${todo.done ? "line-through text-gray-400" : "text-gray-800"}`}
+>
+  {todo.text}
+</span>
                   </div>
                   <div className="flex gap-2 text-sm">
                     <button onClick={() => startEditTodo(index)} className="text-indigo-600 hover:underline">Edit</button>
