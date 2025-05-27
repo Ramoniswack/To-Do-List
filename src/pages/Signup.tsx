@@ -4,12 +4,21 @@ import { signupSchema } from "../schema/authSchema";
 import type { SignupData } from "../types/types";
 import { useNavigate } from "react-router-dom";
 import {FiEye, FiEyeOff} from 'react-icons/fi';
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 
 
 
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
+
+    useEffect(() => {
+  const loggedInUser = Cookies.get("loggedInUser");
+  if (loggedInUser) {
+    navigate("/todo");
+  }
+}, []);
+
 
   const navigate = useNavigate();
 

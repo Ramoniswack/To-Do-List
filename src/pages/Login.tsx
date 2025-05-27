@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import {FiEye, FiEyeOff} from 'react-icons/fi';
@@ -9,6 +9,14 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+  const loggedInUser = Cookies.get("loggedInUser");
+  if (loggedInUser) {
+    navigate("/todo");
+  }
+}, []);
+
 
   const handleLogin = () => {
     // const stored = localStorage.getItem("user");
