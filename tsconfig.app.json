@@ -15,11 +15,11 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Linting */
+    /* Linting & Type Safety */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
+    "forceConsistentCasingInFileNames": true, // ✅ added for cross-OS compatibility
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },

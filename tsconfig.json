@@ -1,5 +1,20 @@
 {
+  "compilerOptions": {
+    // Enables JSX support for React 17+ (with automatic runtime)
+    "jsx": "react-jsx",
+
+    // Standard libraries required for React DOM apps
+    "lib": ["DOM", "ES2020"],
+
+    // Enforce exact casing in imports to avoid cross-platform issues
+    "forceConsistentCasingInFileNames": true,
+
+    //  Recommended strict mode
+    "strict": true
+  },
   "files": [],
+
+  // Referenced build targets (App and Node separately)
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
