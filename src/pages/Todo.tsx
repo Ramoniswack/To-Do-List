@@ -37,7 +37,7 @@ const Todo = () => {
      const trimmedText = newTodo.trim();
   if (!trimmedText) return;
 
-  if (trimmedText.length > 100) {
+  if (trimmedText.length > 50) {
     alert("Todo should not exceed 50 characters.");
     return;
   }
@@ -176,7 +176,9 @@ const Todo = () => {
                       className="form-checkbox h-5 w-5 text-indigo-600"
                     />
 <span
-  className={`text-sm break-words w-full ${todo.done ? "line-through text-gray-400" : "text-gray-800"}`}
+  className={`text-sm w-full overflow-hidden break-all whitespace-normal ${
+    todo.done ? "line-through text-gray-400" : "text-gray-800"
+  }`}
 >
   {todo.text}
 </span>
