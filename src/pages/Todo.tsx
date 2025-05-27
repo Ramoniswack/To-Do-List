@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-
-// Types
-type TodoItem = {
-  text: string;
-  done: boolean;
-};
+import type { TodoItem } from "../types/types";
 
 const Todo = () => {
   const navigate = useNavigate();
@@ -17,6 +12,9 @@ const Todo = () => {
   const [newTodo, setNewTodo] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editedText, setEditedText] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [viewedDescription, setViewedDescription] = useState<string | null>(null);
+
 
   useEffect(() => {
     const storedTodos = localStorage.getItem(userKey);
@@ -30,22 +28,24 @@ const Todo = () => {
     navigate("/");
   };
 
-  const handleAddTodo = () => {
-    if (!newTodo.trim()) return;
-
-
-     const trimmedText = newTodo.trim();
+ const handleAddTodo = () => {
+  const trimmedText = newTodo.trim();
   if (!trimmedText) return;
-
   if (trimmedText.length > 50) {
     alert("Todo should not exceed 50 characters.");
     return;
   }
-    const updatedTodos = [...todos, { text: newTodo, done: false }];
-    setTodos(updatedTodos);
-    localStorage.setItem(userKey, JSON.stringify(updatedTodos));
-    setNewTodo("");
-  };
+
+  const updatedTodos = [
+    ...todos,
+    { text: trimmedText, done: false, description: newDescription.trim() },
+  ];
+  setTodos(updatedTodos);
+  localStorage.setItem(userKey, JSON.stringify(updatedTodos));
+  setNewTodo("");
+  setNewDescription("");
+};
+
 
   const toggleTodoDone = (index: number) => {
     const updatedTodos = [...todos];
@@ -105,12 +105,12 @@ const Todo = () => {
             Add
           </button>
         </div>  */}
-          <form
+<form
   onSubmit={(e) => {
     e.preventDefault();
     handleAddTodo();
   }}
-  className="flex mb-4"
+  className="space-y-2 mb-4"
 >
   <input
     type="text"
@@ -118,15 +118,24 @@ const Todo = () => {
     value={newTodo}
     onChange={(e) => setNewTodo(e.target.value)}
     maxLength={50}
-    className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    required
+    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+  />
+  <textarea
+    placeholder="Add a description (optional)"
+    value={newDescription}
+    onChange={(e) => setNewDescription(e.target.value)}
+    rows={2}
+    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
   />
   <button
     type="submit"
-    className="bg-indigo-600 text-white px-4 rounded-r-lg hover:bg-indigo-700 transition cursor-pointer"
+    className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition cursor-pointer"
   >
-    Add
+    Add Task
   </button>
 </form>
+
 
 
         {/* Task List */}
@@ -187,6 +196,13 @@ const Todo = () => {
 
                   </div>
                   <div className="flex gap-2 text-sm">
+                    <button
+  onClick={() => setViewedDescription(todo.description || "No description")}
+  className="text-blue-600 hover:underline"
+>
+  View
+</button>
+
                     <button onClick={() => startEditTodo(index)} className="text-indigo-600 hover:underline">Edit</button>
                     <button onClick={() => handleDeleteTodo(index)} className="text-red-500 hover:underline">Delete</button>
                   </div>
@@ -229,6 +245,21 @@ const Todo = () => {
           Logout
         </button>
       </div>
+{viewedDescription !== null && (
+  <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white border border-gray-300 rounded-lg shadow-xl p-6 z-50 max-w-sm w-full">
+    <h2 className="text-xl font-semibold text-indigo-600 mb-2">Task Description</h2>
+    <p className="text-gray-800 whitespace-pre-line">{viewedDescription}</p>
+    <button
+      onClick={() => setViewedDescription(null)}
+      className="mt-4 w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition"
+    >
+      Close
+    </button>
+  </div>
+)}
+
+
+
     </div>
   );
 };

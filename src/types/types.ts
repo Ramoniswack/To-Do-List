@@ -8,4 +8,5 @@ export interface SignupData {
 export interface TodoItem {
   text: string;
   done: boolean;
+  description?: string;
 };
