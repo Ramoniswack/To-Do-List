@@ -67,21 +67,28 @@ localStorage.setItem("users", JSON.stringify(users));
             placeholder="Name"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
-          {errors.name && (
-            <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>
-          )}
+   <div className="min-h-[20px] mt-1">
+  {errors.name && (
+    <p className="text-sm text-red-600">{errors.name.message}</p>
+  )}
+</div>
+
         </div>
 
-        <div>
+  <div>
+
           <input
             {...register("email")}
             placeholder="Email"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
-          {errors.email && (
-            <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>
-          )}
+                <div className="min-h-[20px] mt-1">
+  {errors.email && (
+    <p className="text-sm text-red-600">{errors.email.message}</p>
+  )}
         </div>
+        </div>
+
 
         <div className="relative">
           <input
@@ -90,9 +97,12 @@ localStorage.setItem("users", JSON.stringify(users));
             placeholder="Password"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
-          {errors.password && (
-            <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>
-          )}
+          <div className="min-h-[20px] mt-1">
+  {errors.name && (
+    <p className="text-sm text-red-600">{errors.name.message}</p>
+  )}
+</div>
+
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
