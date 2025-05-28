@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import type { TodoItem } from "../types/types";
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiCheck } from "react-icons/fi";
+
 
 const Todo = () => {
   const navigate = useNavigate();
@@ -15,6 +16,10 @@ const Todo = () => {
   const [editedText, setEditedText] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [viewedDescription, setViewedDescription] = useState<string | null>(null);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+
 
 
   useEffect(() => {
@@ -85,12 +90,58 @@ const Todo = () => {
   const pending = todos.filter((t) => !t.done).length;
   const completed = todos.filter((t) => t.done).length;
 
+ const GradientCheckbox = ({ checked, onToggle }: { checked: boolean; onToggle: () => void }) => {
+  return (
+ <div
+  onClick={onToggle}
+  className={`w-6 h-6 p-[2px] rounded-md cursor-pointer transition 
+    ${checked 
+      ? 'bg-black' 
+      : 'bg-gradient-to-r from-green-400 via-blue-400 to-yellow-300'}
+  `}
+>
+  <div className="w-full h-full flex items-center justify-center rounded-md bg-white">
+    {checked && <FiCheck className="text-black text-sm" />}
+  </div>
+</div>
+
+
+  );
+};
+
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
       <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md">
         <div className="flex items-center justify-center gap-2 mb-4">
   <h1 className="text-3xl font-bold text-indigo-600">Your Tasks</h1>
-  <FiSearch className="text-2xl text-indigo-600 hover:scale-110 transition-transform cursor-pointer" />
+<FiSearch
+  className="text-2xl text-indigo-600 hover:scale-110 transition-transform cursor-pointer"
+  onClick={() => setShowSearch(!showSearch)}
+/>
+{showSearch && (
+  <div className="relative w-full mb-4 mt-2">
+    <input
+      type="text"
+      placeholder="Search tasks..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
+    />
+    <button
+      onClick={() => {
+        setSearchTerm("");
+        setShowSearch(false);
+      }}
+      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600 text-sm"
+    >
+      ✕
+    </button>
+  </div>
+)}
+
+
+
 </div>
 
 
@@ -145,7 +196,11 @@ const Todo = () => {
 
         {/* Task List */}
         <ul className="space-y-3 mb-6">
-          {todos.map((todo, index) => (
+{todos
+  .filter((todo) =>
+    todo.text.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+  .map((todo, index) => (
             <li
               key={index}
               className="flex justify-between items-center bg-gray-50 px-4 py-3 border rounded-lg shadow"
@@ -183,12 +238,20 @@ const Todo = () => {
               ) : (
                 <>
                   <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={todo.done}
-                      onChange={() => toggleTodoDone(index)}
-                      className="form-checkbox h-5 w-5 text-indigo-600"
-                    />
+<label className="relative inline-flex items-center">
+<GradientCheckbox
+  checked={todo.done}
+  onToggle={() => toggleTodoDone(index)}
+/>
+
+
+
+</label>
+
+
+
+
+                
 <span
   className={`text-sm w-full overflow-hidden break-all whitespace-normal ${
     todo.done ? "line-through text-gray-400" : "text-gray-800"
