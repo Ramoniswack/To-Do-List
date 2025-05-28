@@ -211,7 +211,7 @@ const Todo = () => {
     e.preventDefault();
     handleSaveEdit(index);
   }}
-  className="flex w-full gap-2"
+  className="flex flex-col sm:flex-row w-full gap-2"
 >
   <input
     value={editedText}
