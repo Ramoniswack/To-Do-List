@@ -196,12 +196,18 @@ const GradientCheckbox = ({ checked, onToggle }: { checked: boolean; onToggle: (
               rows={2}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
-            <button
-              type="submit"
-              className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition cursor-pointer"
-            >
-              Add Task
-            </button>
+ <button
+  type="submit"
+  disabled={showSearch}
+  className={`w-full py-2 rounded-lg transition cursor-pointer 
+    ${showSearch
+      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+      : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
+>
+  Add Task
+</button>
+
+
           </form>
 
           {/* Task List */}
