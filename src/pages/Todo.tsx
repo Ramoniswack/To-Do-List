@@ -165,7 +165,7 @@ const GradientCheckbox = ({ checked, onToggle }: { checked: boolean; onToggle: (
                   setSearchTerm("");
                   setShowSearch(false);
                 }}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600 text-sm"
+className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600 text-xl"
               >
                 ✕
               </button>
@@ -180,15 +180,17 @@ const GradientCheckbox = ({ checked, onToggle }: { checked: boolean; onToggle: (
             }}
             className="space-y-2 mb-4"
           >
-            <input
-              type="text"
-              placeholder="Add a task"
-              value={newTodo}
-              onChange={(e) => setNewTodo(e.target.value)}
-              maxLength={50}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
+        <input
+  type="text"
+  placeholder="Add a task"
+  value={newTodo}
+  onChange={(e) => setNewTodo(e.target.value)}
+  onFocus={() => setShowSearch(false)} 
+  maxLength={50}
+  required
+  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+/>
+
             <textarea
               placeholder="Add a description (optional)"
               value={newDescription}
