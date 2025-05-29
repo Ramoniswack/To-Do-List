@@ -70,6 +70,8 @@ const currentTodos = filteredTodos.slice(startIndex, startIndex + itemsPerPage);
   };
 
   const handleDeleteTodo = (index: number) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this task?");
+    if (!confirmDelete) return;
     const updatedTodos = todos.filter((_, i) => i !== index);
     setTodos(updatedTodos);
     localStorage.setItem(userKey, JSON.stringify(updatedTodos));
@@ -242,19 +244,19 @@ const currentTodos = filteredTodos.slice(startIndex, startIndex + itemsPerPage);
               onClick={() =>
                 setViewedDescription(todo.description || "No description")
               }
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 hover:underline cursor-pointer"
             >
               View
             </button>
             <button
               onClick={() => startEditTodo(index)}
-              className="text-indigo-600 hover:underline"
+              className="text-indigo-600 hover:underline cursor-pointer"
             >
               Edit
             </button>
             <button
               onClick={() => handleDeleteTodo(index)}
-              className="text-red-500 hover:underline"
+              className="text-red-500 hover:underline cursor-pointer"
             >
               Delete
             </button>
