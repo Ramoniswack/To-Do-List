@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import {FiEye, FiEyeOff} from 'react-icons/fi';
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import Footer from "../components/Footer";
 
 
 
@@ -54,11 +55,21 @@ localStorage.setItem("users", JSON.stringify(users));
   
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-100 to-indigo-200 px-4">
+   
+
+    <div className="flex flex-col min-h-screen bg-gray-100">
+
+    <div className="flex-grow flex justify-center items-center bg-gray-100  px-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-md space-y-5"
       >
+           {/* Logo */}
+          <img
+            src="/ats.png"
+            alt="Aaja Ta Suree Logo"
+            className="w-24 mx-auto mb-4"
+          />
         <h2 className="text-3xl font-bold text-center text-indigo-600">Sign Up</h2>
 
         <div>
@@ -141,6 +152,12 @@ localStorage.setItem("users", JSON.stringify(users));
 </button>
       </form>
     </div>
+    
+    
+    <Footer />
+        </div>
+
+
   );
 };
 
