@@ -43,7 +43,7 @@ const Login = () => {
           <img
             src="/ats.png"
             alt="Aaja Ta Suree Logo"
-            className="w-24 mx-auto mb-4"
+            className="w-24 mx-auto mb-4 animate-fadeInScale transition-transform transform hover:scale-105"
           />
 
           <h2 className="text-2xl font-bold text-center text-indigo-600">Login</h2>
