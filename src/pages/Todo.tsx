@@ -336,7 +336,7 @@ const GradientCheckbox = ({ checked, onToggle }: { checked: boolean; onToggle: (
           <div className="absolute inset-0 bg-transparent pointer-events-auto"></div>
           <div className="relative bg-white border border-gray-300 rounded-lg shadow-xl p-6 max-w-sm w-full animate-fadeInScale z-50">
             <h2 className="text-xl font-semibold text-indigo-600 mb-2">Task Description</h2>
-            <p className="text-gray-800 whitespace-pre-line">{viewedDescription}</p>
+<p className="text-gray-800 whitespace-pre-line break-words">{viewedDescription}</p>
             <button
               onClick={() => setViewedDescription(null)}
               className="mt-4 w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition cursor-pointer"
