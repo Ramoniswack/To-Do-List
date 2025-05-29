@@ -90,6 +90,8 @@ const currentTodos = filteredTodos.slice(startIndex, startIndex + itemsPerPage);
   };
 
   const handleSaveEdit = (index: number) => {
+    const confirmEdit = window.confirm("Are you sure you want to save changes?");
+    if (!confirmEdit || !editedText.trim()) return;
     const updatedTodos = [...todos];
     updatedTodos[index].text = editedText;
     setTodos(updatedTodos);
@@ -213,15 +215,35 @@ const currentTodos = filteredTodos.slice(startIndex, startIndex + itemsPerPage);
       className="flex justify-between items-center bg-gray-50 px-4 py-3 border rounded-lg shadow"
     >
       {editingIndex === index ? (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSaveEdit(index);
-          }}
-          className="flex flex-col sm:flex-row w-full gap-2"
-        >
-          {/* your form content remains unchanged */}
-        </form>
+       <form
+  onSubmit={(e) => {
+    e.preventDefault();
+    handleSaveEdit(index);
+  }}
+  className="flex flex-col sm:flex-row w-full gap-2"
+>
+  <input
+    value={editedText}
+    onChange={(e) => setEditedText(e.target.value)}
+    className="flex-grow border px-2 py-1 rounded"
+    autoFocus
+  />
+  <button
+    type="submit"
+    className="bg-indigo-500 text-white px-3 py-1 rounded disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+    disabled={!editedText.trim()}
+  >
+    Save
+  </button>
+  <button
+    type="button"
+    onClick={() => setEditingIndex(null)}
+    className="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400 w-full sm:w-auto"
+  >
+    Cancel
+  </button>
+</form>
+
       ) : (
         <>
           <div className="flex items-center gap-2">
@@ -333,7 +355,7 @@ const currentTodos = filteredTodos.slice(startIndex, startIndex + itemsPerPage);
       <p className="text-gray-800 whitespace-pre-line">{viewedDescription}</p>
       <button
         onClick={() => setViewedDescription(null)}
-        className="mt-4 w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition"
+        className="mt-4 w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition cursor-pointer"
       >
         Close
       </button>
