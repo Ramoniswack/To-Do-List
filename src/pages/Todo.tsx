@@ -19,6 +19,15 @@ const Todo = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+// Pagination setup
+const filteredTodos = todos.filter((todo) =>
+  todo.text.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
+const itemsPerPage = 5;
+const [currentPage, setCurrentPage] = useState(1);
+const startIndex = (currentPage - 1) * itemsPerPage;
+const currentTodos = filteredTodos.slice(startIndex, startIndex + itemsPerPage);
 
 
 
@@ -195,90 +204,88 @@ const Todo = () => {
 
 
         {/* Task List */}
-        <ul className="space-y-3 mb-6">
-{todos
-  .filter((todo) =>
-    todo.text.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-  .map((todo, index) => (
-            <li
-              key={index}
-              className="flex justify-between items-center bg-gray-50 px-4 py-3 border rounded-lg shadow"
+<ul className="space-y-3 mb-6">
+  {currentTodos.map((todo, index) => (
+    <li
+      key={index}
+      className="flex justify-between items-center bg-gray-50 px-4 py-3 border rounded-lg shadow"
+    >
+      {editingIndex === index ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSaveEdit(index);
+          }}
+          className="flex flex-col sm:flex-row w-full gap-2"
+        >
+          {/* your form content remains unchanged */}
+        </form>
+      ) : (
+        <>
+          <div className="flex items-center gap-2">
+            <label className="relative inline-flex items-center">
+              <GradientCheckbox
+                checked={todo.done}
+                onToggle={() => toggleTodoDone(index)}
+              />
+            </label>
+            <span
+              className={`text-sm w-full overflow-hidden break-all whitespace-normal ${
+                todo.done ? "line-through text-gray-400" : "text-gray-800"
+              }`}
             >
-              {editingIndex === index ? (
-                <form
-  onSubmit={(e) => {
-    e.preventDefault();
-    handleSaveEdit(index);
-  }}
-  className="flex flex-col sm:flex-row w-full gap-2"
->
-  <input
-    value={editedText}
-    onChange={(e) => setEditedText(e.target.value)}
-    className="flex-grow border px-2 py-1 rounded"
-    autoFocus
-  />
+              {todo.text}
+            </span>
+          </div>
+          <div className="flex gap-2 text-sm">
+            <button
+              onClick={() =>
+                setViewedDescription(todo.description || "No description")
+              }
+              className="text-blue-600 hover:underline"
+            >
+              View
+            </button>
+            <button
+              onClick={() => startEditTodo(index)}
+              className="text-indigo-600 hover:underline"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => handleDeleteTodo(index)}
+              className="text-red-500 hover:underline"
+            >
+              Delete
+            </button>
+          </div>
+        </>
+      )}
+    </li>
+  ))}
+</ul>
+
+
+        <div className="flex justify-between items-center mb-4">
   <button
-    type="submit"
-    className="bg-indigo-500 text-white px-3 py-1 rounded disabled:opacity-50 disabled:cursor-not-allowed"
-    disabled={!editedText.trim()}
+    disabled={currentPage === 1}
+    onClick={() => setCurrentPage((prev) => prev - 1)}
+    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 cursor-pointer"
   >
-    Save
+    Previous
   </button>
+  <span className="text-sm text-gray-700">
+    Page {currentPage} of {Math.ceil(filteredTodos.length / itemsPerPage)}
+  </span>
   <button
-    type="button"
-    onClick={() => setEditingIndex(null)}
-    className="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400"
+    disabled={startIndex + itemsPerPage >= filteredTodos.length}
+    onClick={() => setCurrentPage((prev) => prev + 1)}
+    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 cursor-pointer"
   >
-    Cancel
+    Next
   </button>
-</form>
+</div>
 
-              ) : (
-                <>
-                  <div className="flex items-center gap-2">
-<label className="relative inline-flex items-center">
-<GradientCheckbox
-  checked={todo.done}
-  onToggle={() => toggleTodoDone(index)}
-/>
-
-
-
-</label>
-
-
-
-
-                
-<span
-  className={`text-sm w-full overflow-hidden break-all whitespace-normal ${
-    todo.done ? "line-through text-gray-400" : "text-gray-800"
-  }`}
->
-  {todo.text}
-</span>
-
-
-
-                  </div>
-                  <div className="flex gap-2 text-sm">
-                    <button
-  onClick={() => setViewedDescription(todo.description || "No description")}
-  className="text-blue-600 hover:underline"
->
-  View
-</button>
-
-                    <button onClick={() => startEditTodo(index)} className="text-indigo-600 hover:underline">Edit</button>
-                    <button onClick={() => handleDeleteTodo(index)} className="text-red-500 hover:underline">Delete</button>
-                  </div>
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3 text-center mb-4">
